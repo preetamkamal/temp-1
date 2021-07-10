@@ -31,10 +31,25 @@ def intra_day():
     res_score, res_state = l2[0],l2[1]
 
     for i in range(len(support_key_levels)):
-        support_key_levels[i].append(sup_state[i])
+        if sup_state[i] == 1:
+            support_key_levels[i].append('Bullish')
+        elif sup_state[i] == -1:
+            support_key_levels[i].append('Bearish')
+        elif sup_state[i] == -0.5:
+            support_key_levels[i].append('Weakly Bearish')
+        else:
+            support_key_levels[i].append('Weakly Bullish')
     
     for i in range(len(resistance_key_levels)):
-        resistance_key_levels[i].append(res_state[i])
+        if res_state[i] == 1:
+            resistance_key_levels[i].append('Bullish')
+        elif res_state[i] == -1:
+            resistance_key_levels[i].append('Bearish')
+        elif res_state[i] == -0.5:
+            resistance_key_levels[i].append('Weakly Bearish')
+        else:
+            resistance_key_levels[i].append('Weakly Bullish')
+
 
     column_names = ['Call_OI', 'Call_change_in_OI','Call_total_traded_vol', 'Call_net_change', 'StrikePrice', 'Put_net_change', 'Put_total_traded_vol', 'Put_change_in_OI', 'Put_OI', 'Trend']
     support_peaks = pd.DataFrame(support_key_levels, columns = column_names )
