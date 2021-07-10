@@ -1,9 +1,10 @@
+<!DOCTYPE html>
 <html>
     <head>
         <title>Stock market prediction</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style1.css') }}">
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style1.css') }}">
     </head>
     <body>
         <div class="topnav">
@@ -14,22 +15,22 @@
         </div>
           
         <div class="container">
-                <img src="niftyImage.jpg" alt="image" width="1503" height="400">
+                <img src="niftyImage.jpg" alt="image" width="100%" height="400">
         </div>
 
         <div class="align">
             <h3>Option contract: Nifty</h3>
-            <button class="button1" type="button" class="btn btn-primary">INTRA-DAY PREDICTION</button>
-            <button class="button1 button2" type="button" class="btn btn-success">WEEKLY PREDICTION</button>
+            <button class="button1" type="button" class="btn btn-primary" onclick="intraDayTrend()">INTRA-DAY PREDICTION</button>
+            <button class="button1 button2" type="button" class="btn btn-success" onclick="weeklyTrend()">WEEKLY PREDICTION</button>
         </div>
 
-        <div class="align-center">
-                <table>
+        <div>
+                <table style="border: 0px;" class="align-center">
                     <thead>
                         <tr>
-                            <th style="border: 0px;" colspan="5">CALLS</th>
-                            <th style="border: 0px;">|</th>
-                            <th style="border: 0px;" colspan="5">PUTS</th>
+                            <th colspan="5">CALLS</th>
+                            <th style="border: 0px;"></th>
+                            <th colspan="5">PUTS</th>
                         </tr>
                         <tr>
                             <th>Predicted Trend</th>
@@ -45,96 +46,74 @@
                             <th>Predicted Trend</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>34</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>34</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-
-                        <tr>
-                            <td>34</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-
-                        <tr>
-                            <td>34</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-
-                        <tr>
-                            <td>34</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-
-                        <tr>
-                            <td>34</td>
-                            <td>45766</td>
-                            <td></td>
-                            <td></td>
-                            <td>12346</td>
-                            <td></td>
-                            <td>12345</td>
-                            <td></td>
-                            <td></td>
-                            <td>67990</td>
-                            <td></td>
-                        </tr>
-
+                    <tbody id="OptionChain">
 
                     </tbody>
-                    
                 </table>
         </div>
-          
+        <script>
+            function intraDayTrend() {
+                const fetchParams = {
+                    method: "GET",
+                    mode: "cors",
+                    headers: new Headers({
+                        'Content-Type': 'application/json'
+                    })
+                };
+                fetch("http://127.0.0.1:5000" + "/intra-day", fetchParams)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    suppLevels = data["supp-levels"]
+                    resLevels = data["res-levels"]
+                    var table = document.getElementById("OptionChain");
+                    for (var i = 0; i < suppLevels.length; i++) {
+                        var tr = table.insertRow(-1);
+                        var tabCell = tr.insertCell(-1);
+                        tabCell.innerHTML = "NA";
+                        for (var j = 0; j < suppLevels[i].length; j++) {
+                            if (j = 3) {
+                                continue
+                            }
+                            tabCell = tr.insertCell(-1);
+                            tabCell.innerHTML = suppLevels[i][j];
+                        }
+                        tabCell = tr.insertCell(-1);
+                        tabCell.innerHTML = suppLevels[i][j].toFixed(2);
+                        tabCell = tr.insertCell(-1);
+                        tabCell.innerHTML = "NA";
+                    }
+                    for (var i = 0; i < resLevels.length; i++) {
+                        var tr = table.insertRow(-1);
+                        var tabCell = tr.insertCell(-1);
+                        tabCell.innerHTML = "NA";
+                        for (var j = 0; j < resLevels[i].length; j++) {
+                            tabCell = tr.insertCell(-1);
+                            tabCell.innerHTML = resLevels[i][j];
+                        }
+                        tabCell = tr.insertCell(-1);
+                        tabCell.innerHTML = "NA";
+                    }
+                })
+                .catch(error => console.log('error', error));
+            }
+
+            function weeklyTrend() {
+                const fetchParams = {
+                    method: "GET",
+                    mode: "cors",
+                    headers: new Headers({
+                        'Content-Type': 'application/json'
+                    })
+                };
+                fetch("http://127.0.0.1:5000" + "/weekly", fetchParams)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                })
+                .catch(error => console.log('error', error));
+            }
+        </script>    
     </body>
 
 </html>
