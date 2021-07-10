@@ -5,7 +5,6 @@ from fetch_option_chain import *
 from main import *
 from api_details import *
 
-# print(__name__)
 app = Flask(__name__, static_folder='static/',
 static_url_path='',
 template_folder='templates/')
@@ -21,19 +20,13 @@ def intra_day():
     dates = get_expiry_dates(real_time_data)
 
     support_key_levels, resistance_key_levels = fetch_support_resistance_levels(real_time_data, dates[0], True)
-    # req_supp_levels = get_req_keys(support_key_levels, spotprice, False)
-    # req_res_levels = get_req_keys(resistance_key_levels, spotprice, True)
+    req_supp_levels = get_req_keys(support_key_levels, spotprice, False)
+    req_res_levels = get_req_keys(resistance_key_levels, spotprice, True)
     result = dict()
-    result['supp-levels'] = support_key_levels
-    result['res-levels'] = resistance_key_levels
+    result['supp-levels'] = req_supp_levels
+    result['res-levels'] = req_res_levels
     
     return result
-
-
-# @app.route('/weekly', methods=['GET'])
-# def intra_day():
-#     real_time_data = fetch_json('NIFTY', "nse")
-#     dates = get_expiry_dates(real_time_data)
 
 
 if __name__ == "__main__":
