@@ -7,9 +7,9 @@ def is_peak(df, i, col):
 def get_peaks(df, col1, INTRA_DAY, col2):
     
     if INTRA_DAY:
-        col = col1
-    else: 
         col = col2
+    else: 
+        col = col1
 
     peaks = list()
     for i in range(2, df.shape[0]-2):
