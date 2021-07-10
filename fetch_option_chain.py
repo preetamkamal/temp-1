@@ -8,7 +8,7 @@ import pandas
 Fetches Option chain data from NSEINDIA using official nse API and returns the data in json format
 '''
 
-def fetch_json(symbol, underlying_asset):
+def fetch_json(symbol="NIFTY", underlying_asset="nse"):
     
     try:
         
@@ -100,7 +100,7 @@ def get_expiry_dates(option_chain_data):
 '''
 Main function that initiates required function calls
 '''
-def driver(symbol, underlying_asset):
+def driver(symbol="NIFTY", underlying_asset="nse"):
 
     ocd = fetch_json(symbol,underlying_asset)
     expiry_dates_available = get_expiry_dates(ocd)

@@ -1,6 +1,4 @@
-# from Project.fetch_option_chain import get_underlying_asset_value
-# from Project.main import get_req_keys
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from fetch_option_chain import * 
 from main import *
 from api_details import *
@@ -15,19 +13,22 @@ def index():
 
 @app.route('/intra-day', methods=['GET'])
 def intra_day():
-    real_time_data = fetch_json('NIFTY', "nse")
-    spotprice = get_underlying_asset_value(real_time_data)
-    dates = get_expiry_dates(real_time_data)
-
-    support_key_levels, resistance_key_levels = fetch_support_resistance_levels(real_time_data, dates[0], True)
-    req_supp_levels = get_req_keys(support_key_levels, spotprice, False)
-    req_res_levels = get_req_keys(resistance_key_levels, spotprice, True)
-    result = dict()
-    result['supp-levels'] = req_supp_levels
-    result['res-levels'] = req_res_levels
     
-    return result
+    data = fetch_json('NIFTY', "nse")
+    dates = get_expiry_dates(data)
+    spotprice = get_underlying_asset_value(data)
+    data = date_filter(data, dates[0])
 
+    support_peaks = get_peaks(data, 'Put_OI', True, 'Put_change_in_OI')
+    resistance_peaks = get_peaks(data, 'Call_OI', True, 'Call_change_in_OI')
+    supp_keys = get_req_keys(support_peaks, spotprice, True)
+    res_keys = get_req_keys(resistance_peaks, spotprice, False)
+
+    return {
+        'supp-levels' : supp_keys,
+        'res-levels' : res_keys
+    }
+    
 
 if __name__ == "__main__":
     app.run(debug=True)

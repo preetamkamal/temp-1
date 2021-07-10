@@ -17,28 +17,23 @@ def get_peaks(df, col1, INTRA_DAY, col2):
             peaks.append(df.iloc[i])
     return pd.DataFrame(peaks, columns = df.columns)
 
-def get_req_keys(df, spotprice, flag):
-    
-    spotprice = get_underlying_asset_value(data)
-    data = date_filter(data, date)
-        
-    if flag:
-        # calls
-        df = get_peaks(data, 'Put_OI', INTRA_DAY, 'Put_change_in_OI')
-        df = df[df['StrikePrice']>spotprice].head(3)
-        return df.values.tolist()
-    else:
-        # puts
-        df = get_peaks(data, 'Call_OI', INTRA_DAY, 'Call_change_in_OI')
-        df = df[df['StrikePrice']<=spotprice].tail(3)
-        return df.values.tolist()
-
 def get_keys(df, spotprice):
     df1 = df[df['StrikePrice']<=spotprice].tail(3)
     df2 = df[df['StrikePrice']>spotprice].head(3)
     df = pd.concat([df1, df2])
     return df.values.tolist()
-     
+
+def get_req_keys(df, spotprice, flag):
+    
+    if flag:
+        #puts
+        df = df[df['StrikePrice']<=spotprice].tail(3)
+        return df.values.tolist()
+    else:
+        #calls
+        df = df[df['StrikePrice']>spotprice].head(3)
+        return df.values.tolist()
+
 '''
 Data Format in each 'level' row of levels
 
