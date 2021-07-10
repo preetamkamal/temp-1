@@ -60,7 +60,6 @@ def get_supp_num(levels):
     score = 0
 
     state = []
-    values = []
 
     for level in levels:
         if level[5] >= 0 and level[-2] >= 0:
@@ -84,7 +83,10 @@ def get_supp_num(levels):
 
         score += level_score
 
-    return score
+    l = []
+    l.append(score)
+    l.append(state)
+    return l
 
 
 def get_resis_num(levels):
@@ -118,8 +120,10 @@ def get_resis_num(levels):
         level_score *= level_priority[i] * state[i]
 
         score += level_score
-    return score
-
+    l = []
+    l.append(score)
+    l.append(state)
+    return l
 
 def fetch_support_resistance_levels(data, date, INTRA_DAY):
     
