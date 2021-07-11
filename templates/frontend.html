@@ -51,6 +51,9 @@
                     </tbody>
                 </table>
         </div>
+        <div>
+            <h3 id="FinalTrend" class="align-center"> </h3>
+        </div>
         <script>
             function intraDayTrend() {
                 const fetchParams = {
@@ -66,34 +69,45 @@
                     console.log(data)
                     suppLevels = data["supp-levels"]
                     resLevels = data["res-levels"]
+                    var finalTrend = document.getElementById("FinalTrend");
+                    finalTrend.innerHTML = data["trend"]
                     var table = document.getElementById("OptionChain");
-                    tabCell.innerHTML = {};
+                    table.innerHTML = "";
                     for (var i = 0; i < suppLevels.length; i++) {
                         var tr = table.insertRow(-1);
                         var tabCell = tr.insertCell(-1);
-                        tabCell.innerHTML = "NA";
+                        tabCell.innerHTML = "";
                         for (var j = 0; j < suppLevels[i].length; j++) {
-                           /* if (j = 3) {
-                                continue
-                            }*/
-                            tabCell = tr.insertCell(-1);
-                            tabCell.innerHTML = suppLevels[i][j];
+                            if (j == 3 || j == 5) {
+                                tabCell = tr.insertCell(-1);
+                                tabCell.innerHTML = suppLevels[i][j].toFixed(2);
+                            }
+                            else{
+                                tabCell = tr.insertCell(-1);
+                                tabCell.innerHTML = suppLevels[i][j];
+                            }
                         }
                         /*tabCell = tr.insertCell(-1);
                         tabCell.innerHTML = suppLevels[i][j].toFixed(2); */
-                        tabCell = tr.insertCell(-1);
-                        tabCell.innerHTML = "NA";
+                       // tabCell = tr.insertCell(-1);
+                        //tabCell.innerHTML = "NA";
                     }
                     for (var i = 0; i < resLevels.length; i++) {
                         var tr = table.insertRow(-1);
                         var tabCell = tr.insertCell(-1);
-                        tabCell.innerHTML = "NA";
-                        for (var j = 0; j < resLevels[i].length; j++) {
-                            tabCell = tr.insertCell(-1);
-                            tabCell.innerHTML = resLevels[i][j];
+                        tabCell.innerHTML = resLevels[i][9];
+                        for (var j = 0; j < resLevels[i].length-1; j++) {
+                            if(j == 3 || j == 5){
+                                tabCell = tr.insertCell(-1);
+                                tabCell.innerHTML = resLevels[i][j].toFixed(2);
+                            }
+                            else{
+                                tabCell = tr.insertCell(-1);
+                                tabCell.innerHTML = resLevels[i][j];
+                            }
                         }
                         tabCell = tr.insertCell(-1);
-                        tabCell.innerHTML = "NA";
+                        tabCell.innerHTML = "";
                     }
                 })
                 .catch(error => console.log('error', error));
@@ -111,6 +125,48 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log(data)
+                    suppLevels = data["supp-levels"]
+                    resLevels = data["res-levels"]
+                    var finalTrend = document.getElementById("FinalTrend");
+                    finalTrend.innerHTML = data["trend"]
+                    var table = document.getElementById("OptionChain");
+                    table.innerHTML = "";
+                    for (var i = 0; i < suppLevels.length; i++) {
+                        var tr = table.insertRow(-1);
+                        var tabCell = tr.insertCell(-1);
+                        tabCell.innerHTML = "";
+                        for (var j = 0; j < suppLevels[i].length; j++) {
+                            if (j == 3 || j == 5) {
+                                tabCell = tr.insertCell(-1);
+                                tabCell.innerHTML = suppLevels[i][j].toFixed(2);
+                            }
+                            else{
+                                tabCell = tr.insertCell(-1);
+                                tabCell.innerHTML = suppLevels[i][j];
+                            }
+                        }
+                        /*tabCell = tr.insertCell(-1);
+                        tabCell.innerHTML = suppLevels[i][j].toFixed(2); */
+                       // tabCell = tr.insertCell(-1);
+                        //tabCell.innerHTML = "NA";
+                    }
+                    for (var i = 0; i < resLevels.length; i++) {
+                        var tr = table.insertRow(-1);
+                        var tabCell = tr.insertCell(-1);
+                        tabCell.innerHTML = resLevels[i][9];
+                        for (var j = 0; j < resLevels[i].length-1; j++) {
+                            if(j == 3 || j == 5){
+                                tabCell = tr.insertCell(-1);
+                                tabCell.innerHTML = resLevels[i][j].toFixed(2);
+                            }
+                            else{
+                                tabCell = tr.insertCell(-1);
+                                tabCell.innerHTML = resLevels[i][j];
+                            }
+                        }
+                        tabCell = tr.insertCell(-1);
+                        tabCell.innerHTML = "";
+                    }
                 })
                 .catch(error => console.log('error', error));
             }
